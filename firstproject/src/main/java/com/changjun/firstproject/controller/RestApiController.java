@@ -2,12 +2,14 @@ package com.changjun.firstproject.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.changjun.firstproject.dto.request.ExampleDto;
 import com.changjun.firstproject.dto.response.ExampleResponseDto;
+import com.changjun.firstproject.service.implement.RestApiServiceimplement;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +50,11 @@ class ParamDto {
 @RestController
 @RequestMapping(value = "api")
 public class RestApiController {
+    @Autowired//component로 등록한것은 Autowired로 읽어옴(Serivece도 됨)
+    private RestApiServiceimplement restApiService;
+    public RestApiController(RestApiServiceimplement restApiService){ //의존성 주입
+        this.restApiService = restApiService; 
+    }
 
     @RequestMapping(method = { RequestMethod.GET }, value = "hello2") // 지금 보면 map이 api / hello2 로 되어있기 때문에
                                                                       // 요청을 보낼때에도 http://localhost:4040/api/hello2 같이
@@ -65,7 +72,7 @@ public class RestApiController {
     // request 를 url에 넣어서 보냄
     @GetMapping("get-method") // 바로 path 인 value 값만 설정하게 됨
     public String getMethod() {
-        return "Response of Get Request";
+        return restApiService.getMethod();
     }
 
     // Post Method @PostMapping
